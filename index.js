@@ -1,25 +1,6 @@
 const express = require("express");
 const app = express();
 let data = [
-    {
-        nome:"Ronaldo",
-        pais:"Brasil",
-        posicao:"Atacante",
-        id:1,
-    },
-    {
-        nome:"Kaká",
-        pais:"Brasil",
-        posicao:"Meio Campo",
-        id:2
-    },
-    {
-        nome:"Buffon",
-        pais:"Italia",
-        posicao:"Goleiro",
-        id:3
-    }
-
 ]
 app.use(express.json())
 
@@ -30,7 +11,7 @@ app.get("/players",(request,response)=>{
 app.post("/players",(request, response)=>{
     const body = request.body
     const ultimo = data[data.length - 1]
-    const id = ultimo.id + 1
+    const id = ultimo ? ultimo.id + 1 : 1
     data.push({
         ...body, id
     })
@@ -47,6 +28,14 @@ app.put("/players/:id",(request,response)=>{
             }
         }
         return item;
+    })
+    return response.json(data)
+})
+
+app.delete("/players/:id", (request,response)=>{
+    const id = request.params?.id
+    data = data.filter((item)=>{
+        return item.id!==Number(id)
     })
     return response.json(data)
 })
